@@ -1,0 +1,105 @@
+<!DOCTYPE html><!--HTML5 doctype-->
+<html>
+<head>
+	<title>Your New Application</title>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
+    <link href="css/paint.css" rel="stylesheet"/>
+	<style type="text/css">
+		/* Prevent copy paste for all elements except text fields */
+		*  { -webkit-user-select:none; -webkit-tap-highlight-color:rgba(255, 255, 255, 0); }
+		input, textarea  { -webkit-user-select:text; }
+		body { background-color:white; color:black }
+	</style>
+	<script src='intelxdk.js'></script>
+	<script type="text/javascript">
+		/* This code is used to run as soon as Intel activates */
+		var onDeviceReady=function(){
+		//hide splash screen
+		intel.xdk.device.hideSplashScreen();
+		};
+		document.addEventListener("intel.xdk.device.ready",onDeviceReady,false);
+	</script>
+</head>
+<body style="margin: 0px;">
+    <div id="action-bar">
+        <select id="color">
+            <option  value="red">red</option>
+            <option  value="blue">blue</option>
+            <option  value="green">green</option>
+        </select>
+    </div>
+    <canvas id="canvas"></canvas>
+    
+</body>
+    
+    <script>
+        $(document).ready(function(){
+            $('#canvas').attr('height', $('body').height());
+            $('#canvas').attr('width', $('body').width());
+            
+            canvas = document.getElementById('canvas');
+            context = document.getElementById('canvas').getContext("2d");
+            
+            context.strokeStyle = "#ff0000";
+            context.lineJoin = "round";
+            context.lineWidth = 10;
+            paint = false;
+
+            canvas.addEventListener('touchstart', function(event) {
+                $('#action-bar').slideUp(350);
+                context.beginPath();
+                context.moveTo(event.changedTouches[0].pageX, event.changedTouches[0].pageY);
+                context.stroke();
+                paint = true;
+            }, false);
+
+            canvas.addEventListener('touchmove', function(event) {
+                event.preventDefault();
+                if(paint){
+                    context.lineTo(event.changedTouches[0].pageX, event.changedTouches[0].pageY);
+                    context.stroke();
+                }
+            }, false);
+            
+            canvas.addEventListener('touchend', function(event) {
+                $('#action-bar').slideDown(350);
+                context.closePath();
+                paint = false;
+            }, false);
+            
+            
+            $('#color').change(function(e){
+                e.preventDefault();
+                var color = $(this).val();
+               
+                switch(color){
+                    case "red":
+                        context.strokeStyle = "#ff0000";
+                        return true;
+                    case "blue":
+                        context.strokeStyle = "#0000ff";
+                        return true;
+                    case "green":
+                        context.strokeStyle = "#00ff00";
+                        return true;
+                    default:
+                        return true;
+                }
+                return true;
+                
+            });
+            
+            
+            
+            
+            
+        });
+     
+        
+        
+        
+    </script>
+</html>
