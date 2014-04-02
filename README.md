@@ -1,0 +1,1 @@
+Create a new project with the Intel XDK and place all these files into the WWW directory.
